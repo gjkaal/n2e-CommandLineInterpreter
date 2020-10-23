@@ -1,12 +1,12 @@
 namespace n2e.CommandLineInterpreter.UnitTests
 {
-    using n2e.CommandLineInterpreter;
-    using System;
-    using Xunit;
     using Moq;
-    using System.Collections.Generic;
+    using n2e.CommandLineInterpreter;
     using n2e.CommandLineInterpreter.Abstractions;
     using n2e.CommandLineInterpreter.HelpExtensions;
+    using System;
+    using System.Collections.Generic;
+    using Xunit;
 
     public class CmdArgConfiguratorTests
     {
@@ -38,9 +38,11 @@ namespace n2e.CommandLineInterpreter.UnitTests
         }
 
         [Fact]
-        public void CannotConstructWithNullConsole()
+        public void CanConstructWithNullConsole()
         {
-            Assert.Throws<ArgumentNullException>(() => new CmdArgConfigurator(new CmdArgConfiguration { OnUnrecognizedArguments = default(Action<List<string>>), ShowHelpOnExtraArguments = false, CustomHelp = default(Action<IStdOut, HelpData>) }, default(IStdOut)));
+            var instance = new CmdArgConfigurator(
+                new CmdArgConfiguration { OnUnrecognizedArguments = default(Action<List<string>>), ShowHelpOnExtraArguments = false, CustomHelp = default(Action<IStdOut, HelpData>) }, default(IStdOut));
+            Assert.NotNull(instance);
         }
 
         [Fact]
@@ -48,7 +50,7 @@ namespace n2e.CommandLineInterpreter.UnitTests
         {
             var param = new CmdArgParam { Key = "TestValue131303203", Handler = default(Action<string>), Description = "TestValue1017463587" };
             _testClass.AddParameter(param);
-            Assert.True(false, "Create or modify test");
+            Assert.NotEmpty(_testClass.Parameters);
         }
 
         [Fact]
@@ -60,9 +62,12 @@ namespace n2e.CommandLineInterpreter.UnitTests
         [Fact]
         public void CanCallAddParametersWithIEnumerableOfCmdArgParam()
         {
-            var parameters = new[] { new CmdArgParam { Key = "TestValue1331930797", Handler = default(Action<string>), Description = "TestValue547126392" }, new CmdArgParam { Key = "TestValue505075162", Handler = default(Action<string>), Description = "TestValue1108596722" }, new CmdArgParam { Key = "TestValue1367724712", Handler = default(Action<string>), Description = "TestValue515907493" } };
+            var parameters = new[] {
+                new CmdArgParam { Key = "TestValue1331930797", Handler = default(Action<string>), Description = "TestValue547126392" },
+                new CmdArgParam { Key = "TestValue505075162", Handler = default(Action<string>), Description = "TestValue1108596722" },
+                new CmdArgParam { Key = "TestValue1367724712", Handler = default(Action<string>), Description = "TestValue515907493" } };
             _testClass.AddParameters(parameters);
-            Assert.True(false, "Create or modify test");
+            Assert.Equal(3, _testClass.Parameters.Count);
         }
 
         [Fact]
@@ -74,9 +79,12 @@ namespace n2e.CommandLineInterpreter.UnitTests
         [Fact]
         public void CanCallAddParametersWithArrayOfCmdArgParam()
         {
-            var parameters = new[] { new CmdArgParam { Key = "TestValue1361685866", Handler = default(Action<string>), Description = "TestValue166016546" }, new CmdArgParam { Key = "TestValue1619782207", Handler = default(Action<string>), Description = "TestValue513140543" }, new CmdArgParam { Key = "TestValue2145392053", Handler = default(Action<string>), Description = "TestValue1787888934" } };
+            var parameters = new[] {
+                new CmdArgParam { Key = "TestValue1361685866", Handler = default(Action<string>), Description = "TestValue166016546" },
+                new CmdArgParam { Key = "TestValue1619782207", Handler = default(Action<string>), Description = "TestValue513140543" },
+                new CmdArgParam { Key = "TestValue2145392053", Handler = default(Action<string>), Description = "TestValue1787888934" } };
             _testClass.AddParameters(parameters);
-            Assert.True(false, "Create or modify test");
+            Assert.Equal(3, _testClass.Parameters.Count);
         }
 
         [Fact]
@@ -88,16 +96,26 @@ namespace n2e.CommandLineInterpreter.UnitTests
         [Fact]
         public void CanCallUseDefaultHelp()
         {
+            var stdOut = new StdOutStringWriter();
+            _testClass.Console = stdOut;
             _testClass.UseDefaultHelp();
-            Assert.True(false, "Create or modify test");
+            _testClass.DisplayHelp();
+            var result = stdOut.ToString();
+            Assert.NotEmpty(result);
+            Assert.Equal("Help:\r\nKey  Description\r\nhelp Shows application help\r\nArguments are parsed as\r\nKey:Value\r\n", result);
         }
 
         [Fact]
         public void CanCallUseDescription()
         {
             var description = "TestValue255568780";
+            var stdOut = new StdOutStringWriter();
+            _testClass.Console = stdOut;
             _testClass.UseDescription(description);
-            Assert.True(false, "Create or modify test");
+            _testClass.DisplayHelp();
+            var result = stdOut.ToString();
+            Assert.NotEmpty(result);
+            Assert.Contains(description, result);
         }
 
         [Theory]
@@ -113,28 +131,42 @@ namespace n2e.CommandLineInterpreter.UnitTests
         public void CanCallShowHelpOnExtraArguments()
         {
             _testClass.ShowHelpOnExtraArguments();
-            Assert.True(false, "Create or modify test");
+            Assert.True(_testClass.DisplayExtraArguments, "DisplayExtraArguments should be set to true");
         }
 
         [Fact]
         public void CanCallCustomHelp()
         {
-            var helpAction = default(Action<IStdOut, HelpData>);
+#pragma warning disable RCS1163 // Unused parameter, discard in lambda is in preview.
+            Action<IStdOut, HelpData> helpAction = (IStdOut stdOut, HelpData helpData) =>
+#pragma warning restore RCS1163 // Unused parameter.
+            {
+                customHelpCheck = true;
+            };
             _testClass.CustomHelp(helpAction);
-            Assert.True(false, "Create or modify test");
+            _testClass.DisplayHelp();
+            Assert.True(customHelpCheck, "Custom renderer not called.");
         }
 
+        private bool customHelpCheck = false;
+
         [Fact]
-        public void CannotCallCustomHelpWithNullHelpAction()
+        public void CanCallCustomHelpWithNullHelpAction()
         {
-            Assert.Throws<ArgumentNullException>(() => _testClass.CustomHelp(default(Action<IStdOut, HelpData>)));
+            _testClass.CustomHelp((IStdOut i, HelpData a) => { });
+            _testClass.CustomHelp(default(Action<IStdOut, HelpData>));
+            Assert.True(true, "Custom renderer can be reset.");
+            Assert.False(_testClass.HasCustomRenderer);
         }
 
         [Fact]
         public void CanCallDisplayHelp()
         {
+            var stdOut = new StdOutStringWriter();
+            _testClass.Console = stdOut;
             _testClass.DisplayHelp();
-            Assert.True(false, "Create or modify test");
+            var result = stdOut.ToString();
+            Assert.NotEmpty(result);
         }
 
         [Fact]

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using n2e.CommandLineInterpreter.Abstractions;
+﻿using n2e.CommandLineInterpreter.Abstractions;
 using n2e.CommandLineInterpreter.HelpExtensions;
+using System;
+using System.Collections.Generic;
 
 namespace n2e.CommandLineInterpreter
 {
@@ -18,7 +17,7 @@ namespace n2e.CommandLineInterpreter
 
         /// <summary>Flag for extra help.</summary>
         public bool ShowHelpOnExtraArguments { get; set; }
-        
+
         /// <summary>Use a custom help rendering.</summary>
         public Action<IStdOut, HelpData> CustomHelp { get; set; }
 

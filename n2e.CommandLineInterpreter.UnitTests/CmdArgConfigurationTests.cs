@@ -1,11 +1,11 @@
 namespace n2e.CommandLineInterpreter.UnitTests
 {
     using n2e.CommandLineInterpreter;
-    using System;
-    using Xunit;
-    using System.Collections.Generic;
     using n2e.CommandLineInterpreter.Abstractions;
     using n2e.CommandLineInterpreter.HelpExtensions;
+    using System;
+    using System.Collections.Generic;
+    using Xunit;
 
     public class CmdArgConfigurationTests
     {

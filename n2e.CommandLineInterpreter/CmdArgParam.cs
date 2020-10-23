@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using n2e.CommandLineInterpreter.HelpExtensions;
 
 namespace n2e.CommandLineInterpreter
 {
@@ -16,7 +13,7 @@ namespace n2e.CommandLineInterpreter
         private Action<string> handler;
 
         /// <summary>
-        /// The key or keys for the command. A key may contain aliases seperated by a pipe character. 
+        /// The key or keys for the command. A key may contain aliases seperated by a pipe character.
         /// </summary>
         public string Key { get; set; }
 
@@ -29,7 +26,7 @@ namespace n2e.CommandLineInterpreter
             {
                 if (string.IsNullOrEmpty(Key))
                 {
-                    return new string[]{ };
+                    return new string[] { };
                 }
                 return Key.Split('|');
             }
@@ -54,7 +51,6 @@ namespace n2e.CommandLineInterpreter
                 handler = value;
             }
         }
-
 
         /// <summary>Description for this parameter.</summary>
         public string Description { get; set; }

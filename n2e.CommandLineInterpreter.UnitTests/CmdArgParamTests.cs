@@ -1,7 +1,6 @@
 namespace n2e.CommandLineInterpreter.UnitTests
 {
     using n2e.CommandLineInterpreter;
-    using System;
     using Xunit;
 
     public class CmdArgParamTests
@@ -32,16 +31,22 @@ namespace n2e.CommandLineInterpreter.UnitTests
         public void CanGetKeys()
         {
             Assert.IsType<string[]>(_testClass.Keys);
-            Assert.True(false, "Create or modify test");
+            Assert.NotNull(_testClass.Keys);
         }
 
         [Fact]
         public void CanSetAndGetHandler()
         {
-            var testValue = default(Action<string>);
-            _testClass.Handler = testValue;
-            Assert.Equal(testValue, _testClass.Handler);
+            _testClass.Handler = GetTestValue;
+            Assert.Equal(GetTestValue, _testClass.Handler);
         }
+
+        private void GetTestValue(string a)
+        {
+            _canSetAndGetHandlerCheck = true;
+        }
+
+        private bool _canSetAndGetHandlerCheck = false;
 
         [Fact]
         public void CanSetAndGetDescription()

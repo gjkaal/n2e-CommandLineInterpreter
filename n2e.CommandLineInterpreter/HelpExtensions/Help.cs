@@ -1,4 +1,5 @@
 ﻿using n2e.CommandLineInterpreter.Abstractions;
+using System;
 
 namespace n2e.CommandLineInterpreter.HelpExtensions
 {
@@ -23,6 +24,7 @@ namespace n2e.CommandLineInterpreter.HelpExtensions
         // ********************************************************************************
         public static void Show(this IStdOut console, HelpData data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data), "Expect helpdata to display.");
             int longestKeyLenght = 5;
             foreach (var item in data.Parameters)
             {
@@ -31,18 +33,18 @@ namespace n2e.CommandLineInterpreter.HelpExtensions
                     longestKeyLenght = item.Key.Length + 2;
                 }
             }
-            console.WriteLine("Help:");
+            console?.WriteLine("Help:");
             if (!string.IsNullOrEmpty(data.Description))
             {
-                console.WriteLine(data.Description);
+                console?.WriteLine(data.Description);
             }
-            console.WriteLine("Key{0}Description", GetSpaces(longestKeyLenght - 3));
+            console?.WriteLine("Key{0}Description", GetSpaces(longestKeyLenght - 3));
             foreach (var item in data.Parameters)
             {
                 console.WriteLine("{0}{1}{2}", item.Key, GetSpaces(longestKeyLenght - item.Key.Length), item.Description);
             }
-            console.WriteLine("Arguments are parsed as");
-            console.WriteLine("Key:Value");
+            console?.WriteLine("Arguments are parsed as");
+            console?.WriteLine("Key:Value");
         }
     }
 }

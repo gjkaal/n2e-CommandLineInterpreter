@@ -1,9 +1,9 @@
 namespace n2e.CommandLineInterpreter.UnitTests.HelpExtensions
 {
-    using n2e.CommandLineInterpreter.HelpExtensions;
-    using Xunit;
-    using System.Collections.Generic;
     using n2e.CommandLineInterpreter;
+    using n2e.CommandLineInterpreter.HelpExtensions;
+    using System.Collections.Generic;
+    using Xunit;
 
     public class HelpDataTests
     {

@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_SolutionFiles", "_Solution
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "n2e.CommandLineInterpreter.UnitTests", "n2e.CommandLineInterpreter.UnitTests\n2e.CommandLineInterpreter.UnitTests.csproj", "{FBDDBC3F-7A08-4B90-9567-0ABE6DA3E3BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "n2e.CommandLineInterpreter.UnitTests", "n2e.CommandLineInterpreter.UnitTests\n2e.CommandLineInterpreter.UnitTests.csproj", "{FBDDBC3F-7A08-4B90-9567-0ABE6DA3E3BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

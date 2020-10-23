@@ -2,10 +2,10 @@
 using n2e.CommandLineInterpreter.HelpExtensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace n2e.CommandLineInterpreter
 {
-
     /// <summary>
     /// Command Argument Configurator class.
     /// </summary>
@@ -13,7 +13,6 @@ namespace n2e.CommandLineInterpreter
     {
         private readonly CmdArgConfiguration _config;
         private IStdOut _console;
-
 
         // ********************************************************************************
         /// <summary>
@@ -27,6 +26,7 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public CmdArgConfigurator(CmdArgConfiguration config, IStdOut console)
         {
+            if (config == null) throw new ArgumentNullException(nameof(config), "Configuration is required.");
             _config = config;
             Console = console;
         }
@@ -40,11 +40,24 @@ namespace n2e.CommandLineInterpreter
         /// <created>GJK,23/10/2020</created>
         /// <changed>GJK,23/10/2020</changed>
         // ********************************************************************************
-        public CmdArgConfigurator(CmdArgConfiguration config)
+        public CmdArgConfigurator(CmdArgConfiguration config) : this(config, null)
         {
-            _config = config;
-            Console = null;
         }
+
+        /// <summary>
+        /// Find the set with configured parameters
+        /// </summary>
+        public IReadOnlyCollection<CmdArgParam> Parameters => _config.Parameters;
+
+        /// <summary>
+        /// True if help on extra arguments is to be rendered.
+        /// </summary>
+        public bool DisplayExtraArguments => _config.ShowHelpOnExtraArguments;
+
+        /// <summary>
+        /// True if a custom renderer is used.
+        /// </summary>
+        public bool HasCustomRenderer => _config.CustomHelp != null;
 
         /// <summary>
         /// The console used for rendering the help.
@@ -65,6 +78,7 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public void AddParameter(CmdArgParam param)
         {
+            if (param == null) throw new ArgumentNullException(nameof(param), "Empty parameters are not allowed");
             _config.Parameters.Add(param);
         }
 
@@ -78,7 +92,9 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public void AddParameters(IEnumerable<CmdArgParam> parameters)
         {
-            foreach (var param in parameters)
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters), "Empty parameter list is not allowed");
+
+            foreach (var param in parameters.Where(p => p != null))
             {
                 AddParameter(param);
             }
@@ -94,7 +110,9 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public void AddParameters(params CmdArgParam[] parameters)
         {
-            foreach (var param in parameters)
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters), "Empty parameter list is not allowed");
+
+            foreach (var param in parameters.Where(p => p != null))
             {
                 AddParameter(param);
             }
@@ -127,6 +145,10 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public void UseDescription(string description)
         {
+            if (description == null || string.IsNullOrEmpty(description.Trim()))
+            {
+                throw new ArgumentNullException(nameof(description), "Cannot accept an empty description or a description with only whitespace.");
+            }
             _config.Description = description;
         }
 
@@ -164,7 +186,6 @@ namespace n2e.CommandLineInterpreter
         // ********************************************************************************
         public void DisplayHelp()
         {
-
             if (_config.CustomHelp != null)
             {
                 try
