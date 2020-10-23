@@ -2,7 +2,10 @@
 Commandline interpreter with help, based on the github repo of [Peter Kottas](https://github.com/PeterKottas/DotNetCore.CmdArgParser). 
 Extended with code comments, and refactoring. Unit tests created with the help of SentryOne Unit test generator.
 
+## Github action for CI/CD
 
+Using package for pushing pachage to Nuget:
+[brandedoutcast](https://github.com/brandedoutcast/publish-nuget)
 
 ### My favorite extensions
 
