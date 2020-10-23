@@ -102,7 +102,13 @@ namespace n2e.CommandLineInterpreter.UnitTests
             _testClass.DisplayHelp();
             var result = stdOut.ToString();
             Assert.NotEmpty(result);
-            Assert.Equal("Help:\r\nKey  Description\r\nhelp Shows application help\r\nArguments are parsed as\r\nKey:Value\r\n", result);
+            
+            Assert.Equal(
+                "Help:" + Environment.NewLine +
+                "Key  Description" + Environment.NewLine +
+                "help Shows application help" + Environment.NewLine +
+                "Arguments are parsed as" + Environment.NewLine +
+                "Key:Value" + Environment.NewLine, result);
         }
 
         [Fact]
