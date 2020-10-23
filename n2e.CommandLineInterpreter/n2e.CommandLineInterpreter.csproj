@@ -10,6 +10,9 @@
     <PackageProjectUrl>https://github.com/gjkaal/n2e-CommandLineInterpreter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/gjkaal/n2e-CommandLineInterpreter</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
