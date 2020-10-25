@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Publish Nuget package
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: gjkaal/publish-nuget@v2.5.2
       with:
         PROJECT_FILE_PATH: n2e.CommandLineInterpreter/n2e.CommandLineInterpreter.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
